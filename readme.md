@@ -4,6 +4,21 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
 
 ![Frame 2 (1)](https://github.com/artemisak/Surgery-quota-scheduler/assets/76273674/ff8eb8a2-d7ee-48ee-ac8c-597fd0ba5022)
 
+## Environment usage
+The following environment based on ideas of Gymnasium & PettingZoo projects, using their frameworks to create a versatile and interactive platform of surgery quotas scheduling for reinforcement learning and multi-agent systems.
+
+There are two render modes you can use to launch this environment:
+- 'ansi' render mode launches the console output of current states in the game
+- 'human' render mode launches the pygame window with actual animated states of quotas for all days in calendar
+
+To launch each of these render modes change the following line of code in main.py:
+```python
+env = parallel_env(render_mode='human') # or 'ansi'
+```
+The result of launch 'human' render mode is down below:
+
+
+
 ## Hyperparameters (by default)
 - Baseline reward: $b=0.2$;
 - Number of agents: $N=12$ (by the number of unique combinations of the following parameters);
