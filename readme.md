@@ -15,7 +15,7 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
 <h1>Table of contents</h1>
 
  - [Environment usage](#Environment-usage)
- - [Hyperparameters (by default)](#hyperparameters-(by-default))
+ - [Hyperparameters (by default)](#hyperparameters-by-default)
  - [Calculated parameters](#calculated-parameters)
  - [Rewards](#rewards)
  - [Actions](#actions)
