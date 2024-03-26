@@ -46,7 +46,6 @@ def env(render_mode=None):
 
 def raw_env(render_mode=None):
     env = parallel_env(render_mode=render_mode)
-    # env = parallel_to_aec(env)
     return env
 
 
@@ -118,9 +117,8 @@ class parallel_env(ParallelEnv):
             else:
                 string = 'Game over'
             print(string)
-        if self.render_mode == "human":
-            game()
-
+        # if self.render_mode == "human":
+        #     game()
 
     def close(self):
         pass
@@ -165,7 +163,7 @@ class parallel_env(ParallelEnv):
             self.agents = []
             return {}, {}, {}, {}, {}
 
-        if self.render_mode == "ansi" or "human" or "rgb_array":
+        if self.render_mode == "ansi" or "human":
             self.render()
 
         return observations, rewards, terminations, truncations, infos
@@ -184,15 +182,10 @@ if env.render_mode == 'human':
     pygame.init()
     win_width, win_height = 1000, 600
     win = pygame.display.set_mode((win_width, win_height))
-    pygame.display.set_caption("Surgery Scheduler")
+    pygame.display.set_caption("Surgery Quota Scheduler")
 
 
 def draw_boxes(win, calendar):
-    # pygame.init()
-    # win_width, win_height = 1000, 600
-    # win = pygame.display.set_mode((win_width, win_height))
-    # pygame.display.set_caption("Surgery Scheduler")
-
     win.fill((0, 0, 0))
     box_width = win_width // 16
     for day, n in calendar.items():
@@ -223,4 +216,6 @@ def game():
 while env.agents:
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
     observations, rewards, terminations, truncations, infos = env.step(actions)
+    if env.render_mode == 'human':
+        game()
 env.close()
