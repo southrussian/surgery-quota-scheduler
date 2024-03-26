@@ -1,8 +1,26 @@
 # Surgery-quota-scheduler
+<div>
+  
+[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://python.org/)
+![Static Badge](https://img.shields.io/badge/pettingzoo-3670A0?style=for-the-badge)
+![Static Badge](https://img.shields.io/badge/gymnasium-3670A0?style=for-the-badge)
 
+</div>
 The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Scheduler is a strategic game that revolves around optimizing surgery schedules. Agents, representing surgeries, must navigate a limited capacity schedule, balancing urgency, complexity, and data completeness to maximize rewards. They can move through time slots, hold positions, or recall their quotes, all while contending with partial visibility of the schedule. The goal is to efficiently allocate surgeries across time slots without overcrowding, and the game concludes once a predetermined number of steps are taken. This system aims to simulate the decision-making process in surgical scheduling, emphasizing the importance of flexibility and foresight.
 
-![Frame 2 (1)](https://github.com/artemisak/Surgery-quota-scheduler/assets/76273674/ff8eb8a2-d7ee-48ee-ac8c-597fd0ba5022)
+<h1 style="text-align: center;width: 120%">
+    <img alt="description" src="assets/Frame 2.png" width="90%">
+</h1>
+
+<h1>Table of contents</h1>
+
+ - [Environment usage](#Environment-usage)
+ - [Hyperparameters (by default)](#hyperparameters-(by-default))
+ - [Calculated parameters](#calculated-parameters)
+ - [Rewards](#rewards)
+ - [Actions](#actions)
+ - [Observations](#observations)
+ - [Termination rule](#termination-rule)
 
 ## Environment usage
 The following environment based on ideas of Gymnasium & PettingZoo projects, using their frameworks to create a versatile and interactive platform of surgery quotas scheduling for reinforcement learning and multi-agent systems.
@@ -16,8 +34,8 @@ To launch each of these render modes change the following line of code in main.p
 env = parallel_env(render_mode='human') # or 'ansi'
 ```
 The result of launch 'human' render mode is down below:
-<h1 style="text-align: center;width: 80%">
-    <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="45%">
+<h1 style="text-align: center;width: 120%">
+    <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
 </h1>
 
 
