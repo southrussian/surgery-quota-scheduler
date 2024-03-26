@@ -16,7 +16,9 @@ To launch each of these render modes change the following line of code in main.p
 env = parallel_env(render_mode='human') # or 'ansi'
 ```
 The result of launch 'human' render mode is down below:
-
+<h1 style="text-align: center;width: 80%">
+    <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="45%">
+</h1>
 
 
 ## Hyperparameters (by default)
