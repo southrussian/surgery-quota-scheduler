@@ -8,6 +8,7 @@ from gymnasium.spaces import Discrete
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
 from names_dataset import NameDataset
+from pettingzoo.test import performance_benchmark
 
 nd = NameDataset()
 popular_first_names = nd.get_top_names(country_alpha2='US', n=100)
@@ -26,12 +27,12 @@ def get_random_name():
 
 C = 4
 N = 12
-b = 0.2
 NUM_ITERS = N**2/C
 MOVES = {0: 1,
          1: -1,
          2: 0,
          3: 0}
+b = 0.2
 
 
 def env(render_mode=None):
@@ -46,7 +47,6 @@ def env(render_mode=None):
 
 def raw_env(render_mode=None):
     env = parallel_env(render_mode=render_mode)
-    env = parallel_to_aec(env)
     return env
 
 
@@ -71,6 +71,11 @@ def reward_map(slot_occupancy, end_of_episode, k, action, b):
                 reward = (4 - n) * b
             else:
                 reward = 0
+
+    reward = round(reward, 1)
+
+    if reward == -0.0:
+        reward = 0.0
 
     return reward
 
@@ -97,7 +102,7 @@ class parallel_env(ParallelEnv):
         self.render_mode = render_mode
 
     @functools.lru_cache(maxsize=None)
-    def obesrvation_spacpe(self, agent):
+    def observation_space(self, agent):
         return Discrete(3)
 
     @functools.lru_cache(maxsize=None)
@@ -109,13 +114,17 @@ class parallel_env(ParallelEnv):
             gymnasium.logger.warn('You are calling render mode without \
                                    specifying any render mode.')
             return
-        if len(self.agents) == N:
-            string = 'Current state: \n'
-            for idx, agent in enumerate(self.agents):
-                string += f'{agent.name}: {self.state[self.agents[idx]]}, '
-        else:
-            string = 'Game over'
-        print(string)
+
+        if self.render_mode == "ansi":
+            if len(self.agents) == N:
+                string = 'Current state: \n'
+                for idx, agent in enumerate(self.agents):
+                    string += f'{agent.name}: {self.state[self.agents[idx]]}, '
+            else:
+                string = 'Game over'
+            print(string)
+        # if self.render_mode == "human":
+        #     game()
 
     def close(self):
         pass
@@ -130,6 +139,7 @@ class parallel_env(ParallelEnv):
         return observations, infos
 
     def step(self, actions):
+
         slot_occupancy = [0] * N
         for action in actions.values():
             slot_occupancy[action] += 1
@@ -159,7 +169,7 @@ class parallel_env(ParallelEnv):
             self.agents = []
             return {}, {}, {}, {}, {}
 
-        if self.render_mode == "human":
+        if self.render_mode == "ansi" or "human":
             self.render()
 
         return observations, rewards, terminations, truncations, infos
@@ -171,10 +181,15 @@ def convert_to_calendar(observations):
         dates[date] += 1
     return dates
 
-
-pygame.init()
-win_width, win_height = 1000, 600
-win = pygame.display.set_mode((win_width, win_height))
+# PARALLEL
+env = parallel_env(render_mode='human')
+# performance_benchmark(env)
+observations, infos = env.reset()
+if env.render_mode == 'human':
+    pygame.init()
+    win_width, win_height = 1000, 600
+    win = pygame.display.set_mode((win_width, win_height))
+    pygame.display.set_caption("Surgery Quota Scheduler")
 
 
 def draw_boxes(win, calendar):
@@ -182,30 +197,47 @@ def draw_boxes(win, calendar):
     box_width = win_width // 16
     for day, n in calendar.items():
         if n < 4:
-            color = (0, 255, 0) # Green
+            color = (0, 255, 0)  # Green
         elif n == 4:
             color = (255, 165, 0)  # Orange
         else:
-            color = (255, 0, 0) # Red
-        pygame.draw.rect(win, color, (day * box_width, win_height // 2, box_width, 50))
+            color = (255, 0, 0)  # Red
+        pygame.draw.rect(win, color, (day * box_width, win_height // 2, box_width, 45))
         font = pygame.font.Font(None, 21)
+        text = font.render("Day " + str(day), 1, (255, 255, 255))
+        win.blit(text, (day * box_width + box_width // 2 - text.get_width() // 2, win_height // 2 - text.get_height() - 5))
         text = font.render(str(n), 1, (10, 10, 10))
-        win.blit(text, (day * box_width + box_width // 2, win_height // 2))
+        win.blit(text, (day * box_width + box_width // 2 - text.get_width() // 2, win_height // 2))
     pygame.display.flip()
 
 
-# PARALLEL
-env = parallel_env(render_mode='human')
-observations, infos = env.reset()
-
-while env.agents:
-    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-    observations, rewards, terminations, truncations, infos = env.step(actions)
+def game():
     draw_boxes(win, convert_to_calendar(observations))
     time.sleep(0.5)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-env.close()
 
+
+# while env.agents:
+#     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+#     observations, rewards, terminations, truncations, infos = env.step(actions)
+#     print(env.step(actions))
+#     if env.render_mode == 'human':
+#         game()
+# env.close()
+
+dataset = []
+
+while env.agents:
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+
+    for agent in env.agents:
+        dataset.append((rewards[agent], observations[agent], actions[agent], terminations[agent], truncations[agent]))
+    print(dataset)
+    if env.render_mode == 'human':
+        game()
+
+env.close()
