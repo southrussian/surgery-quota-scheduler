@@ -79,7 +79,7 @@ class GPT(torch.nn.Module):
         self.drop = torch.nn.Dropout(0.1)
         self.blocks = torch.nn.Sequential(*[Block() for _ in range(2)])
         self.ln_f = torch.nn.LayerNorm(32)
-        self.head = torch.nn.Linear(32, 13, bias=False)
+        self.head = torch.nn.Linear(32, 4, bias=False)
         self.apply(init_weights)
         self.state_encoder = torch.nn.Sequential(torch.nn.Linear(1, 32), torch.nn.Tanh())
         self.action_encoder = torch.nn.Sequential(torch.nn.Linear(1, 32), torch.nn.Tanh())

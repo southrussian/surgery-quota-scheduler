@@ -6,21 +6,6 @@ from trainer_simplified import Trainer
 from gpt_model_simplified import GPT
 import pickle
 
-# toy_example_tensor = [
-#     (torch.tensor([0.0]), torch.tensor([1]), torch.tensor([1]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.8]), torch.tensor([1]), torch.tensor([0]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.0]), torch.tensor([1]), torch.tensor([2]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([-0.8]), torch.tensor([1]), torch.tensor([1]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.8]), torch.tensor([1]), torch.tensor([0]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.0]), torch.tensor([1]), torch.tensor([1]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.8]), torch.tensor([1]), torch.tensor([3]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.0]), torch.tensor([1]), torch.tensor([1]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.8]), torch.tensor([2]), torch.tensor([2]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.0]), torch.tensor([1]), torch.tensor([3]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.8]), torch.tensor([2]), torch.tensor([0]), torch.tensor(False), torch.tensor(False)),
-#     (torch.tensor([0.0]), torch.tensor([3]), torch.tensor([3]), torch.tensor(False), torch.tensor(False))
-# ]
-
 seed = 123
 random.seed(seed)
 np.random.seed(seed)

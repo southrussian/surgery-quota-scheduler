@@ -252,8 +252,8 @@ while env.agents:
 
     for agent in env.agents:
         dataset.append((torch.tensor([rewards[agent]]),
-                        torch.tensor([actions[agent]]),
                         torch.tensor([observations[agent]]),
+                        torch.tensor([actions[agent]]),
                         torch.tensor([terminations[agent]]),
                         torch.tensor([truncations[agent]])))
     print(dataset)

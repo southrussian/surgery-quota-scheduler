@@ -30,6 +30,7 @@ class Trainer:
             correct_predictions = 0
             total_predictions = 0
             for _, (_, observation, action, _, _) in enumerate(loader):
+                # print(action)
                 observation = observation.to(self.device)
                 action = action.to(self.device)
                 with torch.set_grad_enabled(True):
