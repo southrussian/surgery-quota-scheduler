@@ -6,11 +6,10 @@ import gymnasium
 import pygame
 from gymnasium.spaces import Discrete
 from pettingzoo import ParallelEnv
-from pettingzoo.utils import parallel_to_aec, wrappers
+from pettingzoo.utils import wrappers
 from names_dataset import NameDataset
 import pickle
 import torch
-from pettingzoo.test import performance_benchmark
 
 nd = NameDataset()
 popular_first_names = nd.get_top_names(country_alpha2='US', n=100)
@@ -21,15 +20,15 @@ popular_surnames = nd.get_top_names(country_alpha2='US', n=100,
 def get_random_name():
     if random.randint(0, 1) == 0:
         return (random.choice(popular_first_names['US']['M']) + ' '
-            + random.choice(popular_surnames['US']))
+                + random.choice(popular_surnames['US']))
     else:
         return (random.choice(popular_first_names['US']['F']) + ' '
-            + random.choice(popular_surnames['US']))
+                + random.choice(popular_surnames['US']))
 
 
 C = 4
 N = 12
-NUM_ITERS = N**2/C
+NUM_ITERS = (N ** 2) / C
 MOVES = {0: 1,
          1: -1,
          2: 0,
@@ -52,27 +51,26 @@ def raw_env(render_mode=None):
     return env
 
 
-def reward_map(slot_occupancy, end_of_episode, k, action, b):
+def reward_map(slot_occupancy, position, end_of_episode, k, action, b):
     reward = 0
 
     if end_of_episode:
-        if all(n <= 3 for n in slot_occupancy):
-            reward = 10
-        else:
+        if slot_occupancy[position] >= 4:
             reward = -10
+        else:
+            reward = 10
 
     if action == 0:
         reward = b * k
     elif action == 1:
         reward = -b * k
     elif action == 3:
-        for n in slot_occupancy:
-            if n > 4:
-                reward = -(n - 4) * b
-            elif n < 4:
-                reward = (4 - n) * b
-            else:
-                reward = 0
+        if slot_occupancy[position] > 4:
+            reward = -(slot_occupancy[position] - 4) * b
+        elif slot_occupancy[position] < 4:
+            reward = +(slot_occupancy[position] - 4) * b
+        else:
+            reward = 0
 
     reward = round(reward, 1)
 
@@ -88,7 +86,7 @@ class agent():
         self.urgency = random.randint(1, 3)
         self.comleteness = random.randint(0, 1)
         self.complexity = random.randint(0, 1)
-        self.k = (self.complexity + (1 - self.comleteness))*self.urgency
+        self.k = (self.complexity + (1 - self.comleteness)) * self.urgency
         self.position = 1
 
 
@@ -125,8 +123,8 @@ class parallel_env(ParallelEnv):
             else:
                 string = 'Game over'
             print(string)
-        # if self.render_mode == "human":
-        #     game()
+        if self.render_mode == "human":
+            game()
 
     def close(self):
         pass
@@ -142,26 +140,27 @@ class parallel_env(ParallelEnv):
 
     def step(self, actions):
 
-        slot_occupancy = [0] * N
-        for action in actions.values():
-            slot_occupancy[action] += 1
+        end_of_episode = self.num_moves > NUM_ITERS
 
-        end_of_episode = self.num_moves >= NUM_ITERS
+        slot_occupancy = {i + 1: 0 for i in range(14)}
+        for agent in self.agents:
+            slot_occupancy[agent.position] += 1
 
-        rewards = {agent: reward_map(slot_occupancy, end_of_episode, agent.k, actions[agent], b) for agent in self.agents}
+        rewards = {agent: reward_map(slot_occupancy, agent.position, end_of_episode, agent.k, actions[agent], b) for
+                   agent in self.agents}
 
         terminations = {agent: False for agent in self.agents}
 
         self.num_moves += 1
-        env_truncation = self.num_moves >= NUM_ITERS
+        env_truncation = self.num_moves > NUM_ITERS
         truncations = {agent: env_truncation for agent in self.agents}
 
         for agent in self.agents:
-          agent.position += MOVES[int(actions[agent])]
-          if agent.position > N:
-            agent.position = N
-          if agent.position < 1:
-            agent.position = 1
+            agent.position += MOVES[int(actions[agent])]
+            if agent.position > N:
+                agent.position = N
+            if agent.position < 1:
+                agent.position = 1
         observations = {agent: agent.position for agent in self.agents}
         self.state = observations
 
@@ -178,14 +177,14 @@ class parallel_env(ParallelEnv):
 
 
 def convert_to_calendar(observations):
-    dates = {day+1: 0 for day in range(14)}
+    dates = {day + 1: 0 for day in range(14)}
     for date in observations.values():
         dates[date] += 1
     return dates
 
-# PARALLEL
+
 env = parallel_env(render_mode='human')
-# performance_benchmark(env)
+
 observations, infos = env.reset()
 if env.render_mode == 'human':
     pygame.init()
@@ -207,7 +206,8 @@ def draw_boxes(win, calendar):
         pygame.draw.rect(win, color, (day * box_width, win_height // 2, box_width, 45))
         font = pygame.font.Font(None, 21)
         text = font.render("Day " + str(day), 1, (255, 255, 255))
-        win.blit(text, (day * box_width + box_width // 2 - text.get_width() // 2, win_height // 2 - text.get_height() - 5))
+        win.blit(text,
+                 (day * box_width + box_width // 2 - text.get_width() // 2, win_height // 2 - text.get_height() - 5))
         text = font.render(str(n), 1, (10, 10, 10))
         win.blit(text, (day * box_width + box_width // 2 - text.get_width() // 2, win_height // 2))
     pygame.display.flip()
@@ -222,46 +222,22 @@ def game():
             sys.exit()
 
 
-# while env.agents:
-#     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-#     observations, rewards, terminations, truncations, infos = env.step(actions)
-#     print(env.step(actions))
-#     if env.render_mode == 'human':
-#         game()
-# env.close()
-
-# dataset = []
-#
-# while env.agents:
-#     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-#     observations, rewards, terminations, truncations, infos = env.step(actions)
-#
-#     for agent in env.agents:
-#         dataset.append((rewards[agent], observations[agent], actions[agent], terminations[agent], truncations[agent]))
-#     print(dataset)
-#     if env.render_mode == 'human':
-#         game()
-#
-# env.close()
-
-dataset = []
-
+dataset_per_agent = {agent: [] for agent in env.agents}
 while env.agents:
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
     observations, rewards, terminations, truncations, infos = env.step(actions)
 
     for agent in env.agents:
-        dataset.append((torch.tensor([rewards[agent]]),
-                        torch.tensor([observations[agent]]),
-                        torch.tensor([actions[agent]]),
-                        torch.tensor([terminations[agent]]),
-                        torch.tensor([truncations[agent]])))
-    print(dataset)
-    if env.render_mode == 'human':
-        game()
+        dataset_per_agent[agent].append([torch.tensor([rewards[agent]]),
+                                         torch.tensor([observations[agent]]),
+                                         torch.tensor([actions[agent]]),
+                                         torch.tensor([terminations[agent]]),
+                                         torch.tensor([truncations[agent]])])
 
 env.close()
 
-# Сохранение датасета в формате pickle
+dataset = list(dataset_per_agent.values())
+print(dataset)
+
 with open('madt/dataset.pkl', 'wb') as f:
     pickle.dump(dataset, f)
