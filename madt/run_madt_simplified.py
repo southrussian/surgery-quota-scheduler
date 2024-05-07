@@ -1,7 +1,6 @@
 import random
 import numpy as np
 import torch
-import os
 from trainer_simplified import Trainer
 from gpt_model_simplified import GPT
 import pickle
@@ -26,17 +25,9 @@ if torch.cuda.is_available():
     device = torch.cuda.current_device()
     model = torch.nn.DataParallel(model).to(device)
 
-offline_trainer = Trainer(model)
+trainer = Trainer(model)
 
 with open('dataset.pkl', 'rb') as f:
     dataset = pickle.load(f)
-    print(dataset)
 
-target_rtgs = 20.
-print("offline target_rtgs: ", target_rtgs)
-for i in range(1):
-    offline_actor_loss, _, __, ___ = offline_trainer.train(dataset)
-    if True:
-        actor_path = '../../offline_model/' + 'easy_trans' + '/actor'
-        if not os.path.exists(actor_path):
-            os.makedirs(actor_path)
+trainer.train(dataset)

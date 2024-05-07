@@ -10,6 +10,7 @@ from pettingzoo.utils import wrappers
 from names_dataset import NameDataset
 import pickle
 import torch
+import gym
 
 nd = NameDataset()
 popular_first_names = nd.get_top_names(country_alpha2='US', n=100)
@@ -28,11 +29,11 @@ def get_random_name():
 
 C = 4
 N = 12
+N_DAYS = 14
 NUM_ITERS = (N ** 2) / C
 MOVES = {0: 1,
          1: -1,
-         2: 0,
-         3: 0}
+         2: 0}
 b = 0.2
 
 
@@ -64,11 +65,9 @@ def reward_map(slot_occupancy, position, end_of_episode, k, action, b):
         reward = b * k
     elif action == 1:
         reward = -b * k
-    elif action == 3:
-        if slot_occupancy[position] > 4:
+    elif action == 2:
+        if slot_occupancy[position] != 0:
             reward = -(slot_occupancy[position] - 4) * b
-        elif slot_occupancy[position] < 4:
-            reward = +(slot_occupancy[position] - 4) * b
         else:
             reward = 0
 
@@ -80,14 +79,14 @@ def reward_map(slot_occupancy, position, end_of_episode, k, action, b):
     return reward
 
 
-class agent():
+class Agent():
     def __init__(self, name):
         self.name = name
         self.urgency = random.randint(1, 3)
         self.comleteness = random.randint(0, 1)
         self.complexity = random.randint(0, 1)
         self.k = (self.complexity + (1 - self.comleteness)) * self.urgency
-        self.position = 1
+        self.position = random.randint(1, 12)
 
 
 class parallel_env(ParallelEnv):
@@ -95,7 +94,7 @@ class parallel_env(ParallelEnv):
                 'name': 'sqsc_v1'}
 
     def __init__(self, render_mode=None):
-        self.possible_agents = [agent(name=get_random_name()) for r in range(N)]
+        self.possible_agents = [Agent(name=get_random_name()) for r in range(N)] ##
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
@@ -107,7 +106,7 @@ class parallel_env(ParallelEnv):
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
-        return Discrete(4)
+        return Discrete(3)
 
     def render(self):
         if self.render_mode is None:
@@ -142,7 +141,7 @@ class parallel_env(ParallelEnv):
 
         end_of_episode = self.num_moves > NUM_ITERS
 
-        slot_occupancy = {i + 1: 0 for i in range(14)}
+        slot_occupancy = {i + 1: 0 for i in range(N_DAYS)}
         for agent in self.agents:
             slot_occupancy[agent.position] += 1
 
@@ -157,8 +156,8 @@ class parallel_env(ParallelEnv):
 
         for agent in self.agents:
             agent.position += MOVES[int(actions[agent])]
-            if agent.position > N:
-                agent.position = N
+            if agent.position > N_DAYS:
+                agent.position = N_DAYS
             if agent.position < 1:
                 agent.position = 1
         observations = {agent: agent.position for agent in self.agents}
@@ -177,7 +176,7 @@ class parallel_env(ParallelEnv):
 
 
 def convert_to_calendar(observations):
-    dates = {day + 1: 0 for day in range(14)}
+    dates = {day + 1: 0 for day in range(N_DAYS)}
     for date in observations.values():
         dates[date] += 1
     return dates
@@ -228,16 +227,14 @@ while env.agents:
     observations, rewards, terminations, truncations, infos = env.step(actions)
 
     for agent in env.agents:
-        dataset_per_agent[agent].append([torch.tensor([rewards[agent]]),
-                                         torch.tensor([observations[agent]]),
-                                         torch.tensor([actions[agent]]),
-                                         torch.tensor([terminations[agent]]),
-                                         torch.tensor([truncations[agent]])])
+        dataset_per_agent[agent].append([torch.tensor(observations[agent]),
+                                         torch.tensor(actions[agent]),
+                                         torch.tensor(rewards[agent])])
 
 env.close()
 
 dataset = list(dataset_per_agent.values())
 print(dataset)
 
-with open('madt/dataset.pkl', 'wb') as f:
-    pickle.dump(dataset, f)
+# with open('madt/dataset.pkl', 'wb') as f:
+#     pickle.dump(dataset, f)

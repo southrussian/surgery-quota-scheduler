@@ -8,9 +8,6 @@ from gymnasium.spaces import Discrete
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
 from names_dataset import NameDataset
-import pickle
-import torch
-from pettingzoo.test import performance_benchmark
 
 nd = NameDataset()
 popular_first_names = nd.get_top_names(country_alpha2='US', n=100)
@@ -73,11 +70,6 @@ def reward_map(slot_occupancy, end_of_episode, k, action, b):
                 reward = (4 - n) * b
             else:
                 reward = 0
-
-    reward = round(reward, 1)
-
-    if reward == -0.0:
-        reward = 0.0
 
     return reward
 
@@ -185,7 +177,6 @@ def convert_to_calendar(observations):
 
 # PARALLEL
 env = parallel_env(render_mode='human')
-# performance_benchmark(env)
 observations, infos = env.reset()
 if env.render_mode == 'human':
     pygame.init()
@@ -222,46 +213,9 @@ def game():
             sys.exit()
 
 
-# while env.agents:
-#     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-#     observations, rewards, terminations, truncations, infos = env.step(actions)
-#     print(env.step(actions))
-#     if env.render_mode == 'human':
-#         game()
-# env.close()
-
-# dataset = []
-#
-# while env.agents:
-#     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-#     observations, rewards, terminations, truncations, infos = env.step(actions)
-#
-#     for agent in env.agents:
-#         dataset.append((rewards[agent], observations[agent], actions[agent], terminations[agent], truncations[agent]))
-#     print(dataset)
-#     if env.render_mode == 'human':
-#         game()
-#
-# env.close()
-
-dataset = []
-
 while env.agents:
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}
     observations, rewards, terminations, truncations, infos = env.step(actions)
-
-    for agent in env.agents:
-        dataset.append((torch.tensor([rewards[agent]]),
-                        torch.tensor([observations[agent]]),
-                        torch.tensor([actions[agent]]),
-                        torch.tensor([terminations[agent]]),
-                        torch.tensor([truncations[agent]])))
-    print(dataset)
     if env.render_mode == 'human':
         game()
-
 env.close()
-
-# Сохранение датасета в формате pickle
-with open('madt/dataset.pkl', 'wb') as f:
-    pickle.dump(dataset, f)

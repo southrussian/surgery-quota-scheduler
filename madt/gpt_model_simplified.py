@@ -24,24 +24,35 @@ class CausalSelfAttention(nn.Module):
         self.attn_drop = nn.Dropout(attn_pdrop)
         self.resid_drop = nn.Dropout(resid_pdrop)
         self.proj = nn.Linear(n_embd, n_embd)
-        self.register_buffer("mask", torch.tril(torch.ones(block_size + 1, block_size + 1))
-                             .view(1, 1, block_size + 1, block_size + 1))
         self.n_head = n_head
+        self.head_dim = n_embd // n_head
 
-    def forward(self, x, layer_past=None):
+    def forward(self, x):
         k = self.key(x)
         q = self.query(x)
         v = self.value(x)
 
+        # Split into heads
+        k = k.view(x.size(0), x.size(1), self.n_head, self.head_dim).transpose(1, 2)
+        q = q.view(x.size(0), x.size(1), self.n_head, self.head_dim).transpose(1, 2)
+        v = v.view(x.size(0), x.size(1), self.n_head, self.head_dim).transpose(1, 2)
+
         att = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(k.size(-1))
-        att = att.masked_fill(self.mask[:, :, :32, :32] == 0, float('-inf'))
+
+        # Dynamically create the mask based on the actual sequence length
+        seq_len = x.size(1)
+        mask = torch.tril(torch.ones(seq_len, seq_len))
+        mask = mask.unsqueeze(0).unsqueeze(0).to(att.device)
+
+        att = att.masked_fill(torch.tensor(mask == 0), torch.tensor(float('-inf')))
+
         att = F.softmax(att, dim=-1)
         att = self.attn_drop(att)
 
-        y = torch.matmul(att, v.transpose(-2, -1))
-        y = y.transpose(1, 2).contiguous().view(x.size(0), -1, self.n_head * (x.size(-1) // self.n_head))
+        y = torch.matmul(att, v)
+        y = y.transpose(1, 2).contiguous().view(x.size(0), -1, self.n_head * self.head_dim)
         y = self.resid_drop(self.proj(y))
-
+        print(y)
         return y
 
 
@@ -83,33 +94,25 @@ class GPT(torch.nn.Module):
         self.apply(init_weights)
         self.state_encoder = torch.nn.Sequential(torch.nn.Linear(1, 32), torch.nn.Tanh())
         self.action_encoder = torch.nn.Sequential(torch.nn.Linear(1, 32), torch.nn.Tanh())
-        # self.action_embeddings = torch.nn.Sequential(torch.nn.Embedding(2, 32), torch.nn.Tanh())
-        # torch.nn.init.normal_(self.action_embeddings[0].weight, mean=0.0, std=0.02)
 
     def configure_optimizers(self):
         return torch.optim.Adam(params=[p for pn, p in self.named_parameters()])
 
     def forward(self, states, actions):
-        state_embeddings = self.state_encoder(states.unsqueeze(dim=1).type(torch.float32).contiguous())
-        action_embeddings = self.action_encoder(actions.unsqueeze(dim=1).type(torch.float32).contiguous())
+        # print(states)
+        state_embeddings = self.state_encoder(states)
+        # print(state_embeddings)
+        action_embeddings = self.action_encoder(actions)
         token_embeddings = state_embeddings + action_embeddings
-        seq_len, embed_dim = token_embeddings.shape[0], token_embeddings.shape[1]
-        position_embedding = torch.nn.Embedding(seq_len, embed_dim)
-        position_ids = torch.arange(seq_len, dtype=torch.long)
-        position_embeddings = position_embedding(position_ids)
-        x = self.drop(token_embeddings + position_embeddings)
-        x = self.blocks(x)
-        x = self.ln_f(x)
-        return self.head(x)
 
-        # print("Input states shape:", states.shape)
-        # state_embeddings = self.state_encoder(states.reshape(-1, 3).type(torch.float32).contiguous())
-        # state_embeddings = self.state_encoder(states.unsqueeze(dim=1).type(torch.float32).contiguous())
-        # seq_len, embed_dim = state_embeddings.shape[0], state_embeddings.shape[1]
-        # position_embedding = torch.nn.Embedding(seq_len, embed_dim)
-        # position_ids = torch.arange(seq_len, dtype=torch.long)
-        # position_embeddings = position_embedding(position_ids)
-        # x = self.drop(state_embeddings + position_embeddings)
-        # x = self.blocks(x)
-        # x = self.ln_f(x)
-        # return self.head(x)
+        seq_len = token_embeddings.size(0)
+        position_embeddings = self.pos_emb[:, :seq_len, :]
+        token_embeddings = token_embeddings + position_embeddings
+
+        x = self.drop(token_embeddings)
+        x = self.blocks(x)
+
+        x = self.ln_f(x)
+        logits = self.head(x)
+
+        return logits
