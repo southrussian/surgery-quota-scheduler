@@ -157,9 +157,7 @@ The environment state space is discrete and defined by the set of parameters of 
 
 Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient:
 
-\[
-\binom{N}{4} = \frac{N!}{4!(N-4)!}
-\]
+$binom{N}{4} = \frac{N!}{4!(N-4)!}$
 
 where \(N = 28\). Thus, we have:
 
