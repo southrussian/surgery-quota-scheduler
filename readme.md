@@ -58,7 +58,7 @@ In order to quickly reproduce the results of numerical experiments follow these 
     ```
     On a Mac, the procedure will be similar, but the directory you need will be at ``env/bin``.
     
-    After that, go back to the directory where the files ```requirements.txt``` and ```fast_predict.py``` are located.
+    After that, go back to the directory where the files ```requirements.txt``` and ```ppo-scheduler.py``` are located.
 
 4) Install the necessary dependencies:
     ```
@@ -123,8 +123,8 @@ $\text{truncation} = \text{True}, \text{if } \text{NUM MOVES} = 2 \times NUM ITE
 
 ## Environment Dynamics
 
-1. **Position Update**: Agent's position changes according to the chosen action. The position is bounded within the range \([0, N_{DAYS}-1]\).
-2. **Mutation Level**: If an agent's position exceeds half of the days (\(N_{DAYS}/2\)):
+1. **Position Update**: Agent's position changes according to the chosen action. The position is bounded within the range $[0, N_{DAYS}-1]$.
+2. **Mutation Level**: If an agent's position exceeds half of the days $N_{DAYS}/2$:
     - Mutation level increases if the action is 0.
     - Mutation level decreases if the action is 1.
 3. **Agent Parameter Changes**: Depending on the mutation level, urgency, completeness, and complexity parameters of agents may change.
