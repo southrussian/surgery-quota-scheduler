@@ -109,12 +109,12 @@ $\- b * k + (s[p] - 2) * b, if  action = 1$
 
 $\- (s[p] - 4) * b, if  action = 2,$
 
-where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
+where $\(s[p]\)$ is the number of agents at position $\p\$, and $\b = 0.2\$.
 
 **Termination Rules**
 
 Environment termination occurs under the following conditions:
-- If the number of iterations $(\(\text{NUMMOVES}\))$ reaches $\(NUMITERS - 1\)$ and more than 80% of agents choose action $\(2\)$:
+- If the number of iterations $\text{NUMMOVES}\$ reaches $\NUMITERS - 1\$ and more than 80% of agents choose action $\2\$:
 
 $\text{termination} = \text{True}, \quad \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8$, $\text{False, otherwise}$
 
