@@ -65,9 +65,7 @@ In order to quickly reproduce the results of numerical experiments follow these 
    python -m pip install -r requirements.txt
    ```
 
-## Environment Description
-
-**Environment Parameters**
+## Environment Parameters
 
 1. **Number of Agents (N)**: 28 agents participate in this environment.
 2. **Number of Days (N_DAYS)**: The setup includes 14 days during which agents interact.
@@ -77,9 +75,9 @@ In order to quickly reproduce the results of numerical experiments follow these 
 - Move back in time: $1$;
 - Hold the position: $2$;
 - Possible agent movements are encoded as $\( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \)$.
-5. **Base Reward Parameter (b)**: Set to 0.2.
+5. **Base Reward Parameter (b)**: Set to $0.2$.
 
-**Agents**
+## Agents
 
 Each agent is characterized by the following parameters:
 - **Name**: Randomly generated from a list of popular names and surnames.
@@ -90,14 +88,14 @@ Each agent is characterized by the following parameters:
 - **Coefficient (k)**: Calculated as $\ k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \$.
 - **Mutation Rate**: Ranges from 0 to 1.
 
-**State and Action Spaces**
+## State and Action Spaces
 
 - **Observation space**: Discrete space represented by a set of size 7 $(\(\mathbb{O} = Discrete(7)\))$.
 - **Action space**: Also discrete, containing 3 possible actions $(\(\mathbb{A} = Discrete(3)\))$.
 
 Actions of each agent are denoted as $\(a_i \in A\)$, where $\(A\)$ is the set of all possible actions.
 
-**Reward Function**
+## Reward Function
 
 An agent's reward is determined by its position and the chosen action according to the following formula:
 
@@ -111,7 +109,7 @@ $\- (s[p] - 4) * b, if  action = 2,$
 
 where $(s[p]$ is the number of agents at position $p$, and $b = 0.2$.
 
-**Termination Rules**
+## Termination Rules
 
 Environment termination occurs under the following conditions:
 - If the number of iterations $NUM MOVES$ reaches $NUM ITERS - 1$ and more than 80% of agents choose action $2$:
@@ -121,9 +119,9 @@ $\text{termination} = \text{True}, \quad \text{if } \frac{\sum \text{actions} = 
 
 - If the number of iterations reaches $(2 \times NUMITERS - 1\)$:
 
-$\text{truncation} = \begin{cases} \text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1  \text{False} & \text{otherwise} \end{cases}\$
+$\text{truncation} = \begin{cases} \text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1 \\ \text{False} & \text{otherwise} \end{cases}$
 
-**Environment Dynamics**
+## Environment Dynamics
 
 1. **Position Update**: Agent's position changes according to the chosen action. The position is bounded within the range \([0, N_{DAYS}-1]\).
 2. **Mutation Level**: If an agent's position exceeds half of the days (\(N_{DAYS}/2\)):
@@ -135,55 +133,14 @@ $\text{truncation} = \begin{cases} \text{True} & \text{if } \text{num_moves} = 2
 
 Upon environment reset, agent parameters and positions are initialized randomly within specified ranges. Initial observations and information are updated according to the current environment state.
 
-### State Space and Combinations
+## State Space and Combinations
 
 The environment state space is discrete and defined by the set of parameters of all agents. Each agent can be assigned to one of the 14 days, resulting in a large number of possible system configurations.
 
-Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient:
+Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient.
 
 Therefore, in this environment, it is possible to have 20475 different combinations of agents over 4 days out of 14. These combinations create a rich state space, allowing modeling of diverse scenarios and strategies.
 
-
-
-## Hyperparameters (by default)
-- Baseline reward: $b=0.2$;
-- Number of agents: $N=12$ (by the number of unique combinations of the following parameters);
-  
-    Each agent consists of a set of these parameters inherent to it:
-    - Complexity: 0 or 1, where 0 - an easy task, 1 - a hard one;
-    - Completeness: 0 or 1, where 0 - an insufficient data, 1 - a fully covered case;
-    - Urgency: ascending from 1 (lowest priority) to 3 (highest priority);
-- Time slot capacity: $C=4$;
-
-## Calculated parameters
-- Number of steps: $S=N^2/C$;
-- Scaling factor: $k=(Complexity+(1 - Completeness))*Urgency$;
-
-## Rewards
-- Reschedule a quote forward 1 time step in future: $r=-b*k$;
-- Reschedule a quote back 1 time step in time: $r=+b*k$;
-- Hold the position: 
-  - if $n \leq C$, $r=(C-n)*b$;
-  - if $n>C$, $r=-(n-C)*b$;
-  where $n$ - current number of agents in focal time slot
-- If more than $C$ agents in one time slot and it is the end of the episode: $r=-10$;
-- If every agent placed in time slot with no more than 3 other agents at the end of the episode $r=+10$;
-
-## Actions
-- Move forward in time;
-- Move back in time;
-- Hold the position;
-- Recall your quote with chance equals to $P=0.05$ (may randomly occur at any time step);
-
-## Observations
-At each step, the agent observes a short period of time that includes the number of bids:
-- 3 steps forward in time
-- 3 steps backward in time.
-  
-They can also see 10 steps into the future and past, but not all of it. For the example, we take a date two weeks from now, the agent observes the current number of bids for that day, however, we intentionally introduce random variation by multiplying the true value by a randomly chosen coefficient (uniform probability distribution) in the range [0.5...1.5], rounding to the nearest integer. There is no information after 10 steps forward or backward.
-
-## Termination rule
-The episode ends when the numbers of steps reaches $S$.
 
 ## Launched application
 The result of launch 'human' render mode is down below:
