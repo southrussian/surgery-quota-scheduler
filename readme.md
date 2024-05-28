@@ -1,9 +1,9 @@
 <div style="display: flex; align-items: center;">
     <img alt="description" src="assets/logo.png" width="10%">
-<span><h1 style="text-align: center;width: 120%">
+<h1 style="">
         <span style="font-size: 6em; margin-left: 30px; display: flex; align-items: center; vertical-align: baseline;">Surgery Quota Scheduler</span>
-    </h1>
-</span>
+</h1>
+
     
 </div>
 
@@ -41,7 +41,7 @@ Be careful, this command will do everything for you, but the code execution will
 
 For the command to work you need to use it in the Git Bash terminal. You can find the required terminal in Visual Studio Code, on the terminal bar:
 
-<img alt="gym" src="assets/git.png" width="100%">
+<img alt="gym" src="assets/git.png" width="80%">
 
 
 In order to quickly reproduce the results of numerical experiments follow these steps:
