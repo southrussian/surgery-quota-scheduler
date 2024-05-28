@@ -107,7 +107,7 @@ Actions of each agent are denoted as $\(a_i \in A\)$, where $\(A\)$ is the set o
 
 An agent's reward is determined by its position and the chosen action according to the following formula:
 
-$\text{reward}(a, p, s, k, \text{action}) = \begin{cases} b \cdot k - (s[p] - 1) \cdot b & \text{if action} = 0 - b \cdot k - (s[p] - 2) \cdot b & \text{if action} = 1 - (s[p] - 4) \cdot b & \text{if action} = 2 \end{cases}\$
+$\(text{reward}(a, p, s, k, \text{action}) = \begin{cases} b \cdot k - (s[p] - 1) \cdot b & \text{if action} = 0 - b \cdot k - (s[p] - 2) \cdot b & \text{if action} = 1 - (s[p] - 4) \cdot b & \text{if action} = 2 \end{cases})$
 
 where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
 
