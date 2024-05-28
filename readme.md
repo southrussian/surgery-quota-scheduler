@@ -64,12 +64,6 @@ In order to quickly reproduce the results of numerical experiments follow these 
     ```
    python -m pip install -r requirements.txt
    ```
-   
-The result of launch 'human' render mode is down below:
-<h1 style="text-align: center;width: 120%">
-    <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
-</h1>
-
 
 ## Environment Description
 
@@ -116,7 +110,10 @@ where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
 Environment termination occurs under the following conditions:
 - If the number of iterations $(\(\text{NUMMOVES}\))$ reaches $\(NUMITERS - 1\)$ and more than 80% of agents choose action $\(2\)$:
 
-$\text{termination} = \begin{cases} \text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\ \text{False} & \text{otherwise} \end{cases}$
+$\text{termination} = \begin{cases}
+\text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\
+\text{False} & \text{otherwise}
+\end{cases}$
 
 - If the number of iterations reaches $(2 \times NUMITERS - 1\)$:
 
