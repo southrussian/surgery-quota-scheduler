@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.categorical import Categorical
-from scheduler import surgery_quota_scheduler
+from scheduler import SurgeryQuotaScheduler
 from torch.utils.tensorboard import SummaryWriter
 
 
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     torch.backends.cudnn.deterministic = args.torch_deterministic
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    env = surgery_quota_scheduler(render_mode='ansi')
+    env = SurgeryQuotaScheduler(render_mode='ansi')
     num_agents = len(env.possible_agents)
     action_size = env.action_space(env.possible_agents[0]).n
     observation_size = env.observation_space(env.possible_agents[0]).n
@@ -296,13 +296,13 @@ if __name__ == "__main__":
 
 
 agent.eval()
-env = surgery_quota_scheduler(render_mode='human')
+env = SurgeryQuotaScheduler(render_mode='human')
 with torch.no_grad():
     next_truncations = False
     next_terminations = False
     next_observations, _ = env.reset(seed=0)
     next_observations = torch.Tensor(list(next_observations.values())).to(device)
-    while not next_truncations or not next_terminations:
+    while not next_truncations and not next_terminations:
         next_actions, _, _, _ = agent.get_action_and_value(next_observations)
         next_observations, next_rewards, next_terminations_list, next_truncations_list, _ = env.step(dict(zip(env.possible_agents, next_actions.cpu().numpy())))
         next_observations = torch.Tensor(list(next_observations.values())).to(device)

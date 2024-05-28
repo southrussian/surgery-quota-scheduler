@@ -1,9 +1,10 @@
-# Surgery-quota-scheduler
+# Surgery Quota Scheduler
 <div>
   
-[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://python.org/)
-![Static Badge](https://img.shields.io/badge/pettingzoo-3670A0?style=for-the-badge)
-![Static Badge](https://img.shields.io/badge/gymnasium-3670A0?style=for-the-badge)
+
+<img alt="description" src="assets/python.png" width="90" link=https://python.org/>
+<img alt="description" src="assets/pettingzoo.png" width="113" link=https://pettingzoo.farama.org/>
+<img alt="description" src="assets/gym.png" width="90" link=https://gymnasium.farama.org/>
 
 </div>
 The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Scheduler is a strategic game that revolves around optimizing surgery schedules. Agents, representing surgeries, must navigate a limited capacity schedule, balancing urgency, complexity, and data completeness to maximize rewards. They can move through time slots, hold positions, or recall their quotes, all while contending with partial visibility of the schedule. The goal is to efficiently allocate surgeries across time slots without overcrowding, and the game concludes once a predetermined number of steps are taken. This system aims to simulate the decision-making process in surgical scheduling, emphasizing the importance of flexibility and foresight.

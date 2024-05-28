@@ -1,8 +1,8 @@
 import random
 import numpy as np
 import torch
-from trainer_simplified import Trainer
-from gpt_model_simplified import GPT
+from trainer import Trainer
+from gpt_model import GPT
 import pickle
 
 seed = 123
