@@ -119,7 +119,7 @@ $\text{termination} = \text{True}, \quad \text{if } \frac{\sum \text{actions} = 
 
 - If the number of iterations reaches $(2 \times NUMITERS - 1\)$:
 
-$\text{truncation} = \begin{cases} \text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1 \\ \text{False} & \text{otherwise} \end{cases}$
+$\text{truncation} = \text{True}, \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1; \text{False}, \text{otherwise}$
 
 ## Environment Dynamics
 
