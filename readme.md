@@ -101,13 +101,13 @@ Actions of each agent are denoted as $\(a_i \in A\)$, where $\(A\)$ is the set o
 
 An agent's reward is determined by its position and the chosen action according to the following formula:
 
-$(reward(a, p, s, k, action) = $
+$reward(a, p, s, k, action) = $
 
-$\- b * k + (s[p] - 1) * b, if action = 0$
+$\- b * k + (s[p] - 1) * b, if \action = 0$
 
-$\- b * k + (s[p] - 2) * b, if action = 1$
+$\- b * k + (s[p] - 2) * b, if \action = 1$
 
-$\- (s[p] - 4) * b, if action = 2$
+$\- (s[p] - 4) * b, if \action = 2$
 
 
 where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
