@@ -21,12 +21,14 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
 <h1>Table of contents</h1>
 
  - [Environment usage](#Environment-usage)
- - [Environment Description](#environment-description)
- - [Calculated parameters](#calculated-parameters)
- - [Rewards](#rewards)
- - [Actions](#actions)
- - [Observations](#observations)
- - [Termination rule](#termination-rule)
+ - [Environment Parameters](#environment-parameters)
+ - [Agents](#agents)
+ - [State and Action Spaces](#state-and-action-spaces)
+ - [Reward Function](#reward-function)
+ - [Termination Rules](#termination-rules)
+ - [Environment Dynamics](#environment-dynamics)
+ - [State Space and Combinations](#state-space-and-combinations)
+ - [Launched application](#launched-application)
 
 ## Environment usage
 To run the model training process, use a bash script as follows:
@@ -138,7 +140,9 @@ Upon environment reset, agent parameters and positions are initialized randomly 
 The environment state space is discrete and defined by the set of parameters of all agents. Each agent can be assigned to one of the 14 days, resulting in a large number of possible system configurations.
 
 Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient.
+
 $\[ \binom{28}{4} = \frac{28!}{4!(28-4)!} = 20475 \]$
+
 Therefore, in this environment, it is possible to have 20475 different combinations of agents over 4 days out of 14. These combinations create a rich state space, allowing modeling of diverse scenarios and strategies.
 
 
