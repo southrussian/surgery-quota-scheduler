@@ -71,7 +71,7 @@ In order to quickly reproduce the results of numerical experiments follow these 
 
 1. **Number of Agents (N)**: 28 agents participate in this environment.
 2. **Number of Days (N_DAYS)**: The setup includes 14 days during which agents interact.
-3. **Number of Iterations (NUM_ITERS)**: Calculated by the formula \(\frac{N^2}{N_{DAYS} \cdot C}\), where \(C = 4\). This determines the total number of steps in an episode.
+3. **Number of Iterations (NUM_ITERS)**: Calculated by the formula $\(\frac{N^2}{N_{DAYS} \cdot C}\)$, where $C = 4$. This determines the total number of steps in an episode.
 4. **Moves**: 
 - Move forward in time: $0$;
 - Move back in time: $1$;
@@ -114,7 +114,7 @@ where $(s[p]$ is the number of agents at position $p$, and $b = 0.2$.
 **Termination Rules**
 
 Environment termination occurs under the following conditions:
-- If the number of iterations $NUM_MOVES$ reaches $NUM_ITERS - 1$ and more than 80% of agents choose action $\2\$:
+- If the number of iterations $NUM MOVES$ reaches $NUM ITERS - 1$ and more than 80% of agents choose action $2$:
 
 $\text{termination} = \text{True}, \quad \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8$, $\text{False, otherwise}$
 
