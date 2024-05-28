@@ -1,10 +1,14 @@
+<h1 style="text-align: center;width: 120%">
+    <img alt="description" src="assets/logo.png" width="90%">
+</h1>
+
 # Surgery Quota Scheduler
 <div>
   
 
-<img alt="description" src="assets/python.png" width="90" link=https://python.org/>
-<img alt="description" src="assets/pettingzoo.png" width="113" link=https://pettingzoo.farama.org/>
-<img alt="description" src="assets/gym.png" width="100" link=https://gymnasium.farama.org/>
+<img alt="python" src="assets/python.png" width="90">
+<img alt="pettingzoo" src="assets/pettingzoo.png" width="113">
+<img alt="gym" src="assets/gym.png" width="100">
 
 </div>
 The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Scheduler is a strategic game that revolves around optimizing surgery schedules. Agents, representing surgeries, must navigate a limited capacity schedule, balancing urgency, complexity, and data completeness to maximize rewards. They can move through time slots, hold positions, or recall their quotes, all while contending with partial visibility of the schedule. The goal is to efficiently allocate surgeries across time slots without overcrowding, and the game concludes once a predetermined number of steps are taken. This system aims to simulate the decision-making process in surgical scheduling, emphasizing the importance of flexibility and foresight.
@@ -24,16 +28,42 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
  - [Termination rule](#termination-rule)
 
 ## Environment usage
-The following environment based on ideas of Gymnasium & PettingZoo projects, using their frameworks to create a versatile and interactive platform of surgery quotas scheduling for reinforcement learning and multi-agent systems.
-
-There are two render modes you can use to launch this environment:
-- 'ansi' render mode launches the console output of current states in the game
-- 'human' render mode launches the pygame window with actual animated states of quotas for all days in calendar
-
-To launch each of these render modes change the following line of code in main.py:
-```python
-env = parallel_env(render_mode='human') # or 'ansi'
+To run the model training process, use a bash script as follows:
 ```
+./run.sh
+```
+Be careful, this command will do everything for you, but the code execution will take a very long time (up to several days on some PC configurations).
+
+For the command to work you need to use it in the Git Bash terminal. You can find the required terminal in Visual Studio Code, on the terminal bar:
+
+<img alt="gym" src="assets/git.png" width="100%">
+
+
+In order to quickly reproduce the results of numerical experiments follow these steps:
+1) Install Python 3.12
+2) Create a virtual environment:
+    ```
+    python -m venv venv
+    ```
+3) Activate the virtual environment
+
+    For Windows/Linux, go to the ```env/Scripts``` folder and run the script in the Powershell console
+    ```
+    ./activate
+    ```
+    If you use the Windows integrated command console instead of Powershell the activation will look like this:
+    ```
+    .\activate
+    ```
+    On a Mac, the procedure will be similar, but the directory you need will be at ``env/bin``.
+    
+    After that, go back to the directory where the files ```requirements.txt``` and ```fast_predict.py``` are located.
+
+4) Install the necessary dependencies:
+    ```
+   python -m pip install -r requirements.txt
+   ```
+   
 The result of launch 'human' render mode is down below:
 <h1 style="text-align: center;width: 120%">
     <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
@@ -79,3 +109,9 @@ They can also see 10 steps into the future and past, but not all of it. For the 
 
 ## Termination rule
 The episode ends when the numbers of steps reaches $S$.
+
+## Launched application
+The result of launch 'human' render mode is down below:
+<h1 style="text-align: center;width: 120%">
+    <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
+</h1>

@@ -1,0 +1,8 @@
+argparse
+wandb
+numpy
+torch
+gymnasium
+pygame
+pettingzoo
+names-dataset
