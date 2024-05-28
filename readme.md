@@ -78,9 +78,10 @@ The result of launch 'human' render mode is down below:
 1. **Number of Agents (N)**: 28 agents participate in this environment.
 2. **Number of Days (N_DAYS)**: The setup includes 14 days during which agents interact.
 3. **Number of Iterations (NUM_ITERS)**: Calculated by the formula \(\frac{N^2}{N_{DAYS} \cdot C}\), where \(C = 4\). This determines the total number of steps in an episode.
-4. **Moves**: - Move forward in time;
-- Move back in time;
-- Hold the position;
+4. **Moves**: 
+- Move forward in time: $0$;
+- Move back in time: $1$;
+- Hold the position: $2$;
 - Possible agent movements are encoded as $\( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \)$.
 5. **Base Reward Parameter (b)**: Set to 0.2.
 
@@ -88,10 +89,10 @@ The result of launch 'human' render mode is down below:
 
 Each agent is characterized by the following parameters:
 - **Name**: Randomly generated from a list of popular names and surnames.
-- **Urgency**: Takes values from the set ${1, 2, 3\}$.
-- **Completeness**: Takes values from the set ${0, 1\}$.
-- **Complexity**: Takes values from the set ${0, 1\}$.
-- **Position**: Agent's position within the range $\(\{0, 1, ..., 13\}\)$.
+- **Urgency**: Takes values from the set $\{\{1, 2, 3\}\}$.
+- **Completeness**: Takes values from the set $\{\{0, 1\}\}$.
+- **Complexity**: Takes values from the set $\{\{0, 1\}\}$.
+- **Position**: Agent's position within the range $\{\{0, 1, ..., 13\}\}$.
 - **Coefficient (k)**: Calculated as $\ k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \$.
 - **Mutation Rate**: Ranges from 0 to 1.
 
