@@ -81,7 +81,7 @@ The result of launch 'human' render mode is down below:
 4. **Moves**: - Move forward in time;
 - Move back in time;
 - Hold the position;
-- Possible agent movements are encoded as \( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \).
+- Possible agent movements are encoded as $\( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \)$.
 5. **Base Reward Parameter (b)**: Set to 0.2.
 
 **Agents**
