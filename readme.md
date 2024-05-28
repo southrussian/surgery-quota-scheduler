@@ -21,7 +21,7 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
 <h1>Table of contents</h1>
 
  - [Environment usage](#Environment-usage)
- - [Hyperparameters (by default)](#hyperparameters-by-default)
+ - [Environment Description](#environment-description)
  - [Calculated parameters](#calculated-parameters)
  - [Rewards](#rewards)
  - [Actions](#actions)
@@ -70,9 +70,8 @@ The result of launch 'human' render mode is down below:
     <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
 </h1>
 
-## Surgery Quota Scheduler Environment
 
-### Environment Description
+## Environment Description
 
 **Environment Parameters**
 
@@ -83,15 +82,15 @@ The result of launch 'human' render mode is down below:
 - Move back in time;
 - Hold the position;
 - Possible agent movements are encoded as \( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \).
-5. **Reward Parameter (b)**: Set to 0.2.
+5. **Base Reward Parameter (b)**: Set to 0.2.
 
 **Agents**
 
 Each agent is characterized by the following parameters:
 - **Name**: Randomly generated from a list of popular names and surnames.
-- **Urgency**: Takes values from the set \(\{1, 2, 3\}\).
-- **Completeness**: Takes values from the set \(\{0, 1\}\).
-- **Complexity**: Takes values from the set \(\{0, 1\}\).
+- **Urgency**: Takes values from the set ${1, 2, 3\}$.
+- **Completeness**: Takes values from the set ${0, 1\}$.
+- **Complexity**: Takes values from the set ${0, 1\}$.
 - **Position**: Agent's position within the range \(\{0, 1, ..., 13\}\).
 - **Coefficient (k)**: Calculated as \( k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \).
 - **Mutation Rate**: Ranges from 0 to 1.
@@ -116,28 +115,23 @@ b \cdot k - (s[p] - 1) \cdot b & \text{if action} = 0 \\
 \end{cases}
 \]
 
-where \(s[p]\) is the number of agents at position \(p\), and \(b = 0.2\).
+where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
 
 **Termination Rules**
 
 Environment termination occurs under the following conditions:
 - If the number of iterations (\(\text{num_moves}\)) reaches \(NUM\_ITERS - 1\) and more than 80% of agents choose action \(2\):
 
-\[
-\text{termination} = \begin{cases}
-\text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\
-\text{False} & \text{otherwise}
-\end{cases}
-\]
+$text{termination} = \begin{cases} \text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\ \text{False} & \text{otherwise} \end{cases}$
 
-- If the number of iterations reaches \(2 \times NUM\_ITERS - 1\):
+- If the number of iterations reaches $(2 \times NUM\_ITERS - 1\)$:
 
-\[
+$[
 \text{truncation} = \begin{cases}
 \text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1 \\
 \text{False} & \text{otherwise}
 \end{cases}
-\]
+\]$
 
 **Environment Dynamics**
 
@@ -156,14 +150,6 @@ Upon environment reset, agent parameters and positions are initialized randomly 
 The environment state space is discrete and defined by the set of parameters of all agents. Each agent can be assigned to one of the 14 days, resulting in a large number of possible system configurations.
 
 Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient:
-
-$[binom{N}{4} = \frac{N!}{4!(N-4)!}]$
-
-where \(N = 28\). Thus, we have:
-
-\[
-\binom{28}{4} = \frac{28!}{4!(28-4)!} = 20475
-\]
 
 Therefore, in this environment, it is possible to have 20475 different combinations of agents over 4 days out of 14. These combinations create a rich state space, allowing modeling of diverse scenarios and strategies.
 
