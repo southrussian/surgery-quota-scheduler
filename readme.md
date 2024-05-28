@@ -1,9 +1,6 @@
 <div style="display: flex; align-items: center;">
     <img alt="description" src="assets/logo.png" width="10%">
-    <span style="font-size: 6em; margin-left: 30px; display: flex; align-items: center; vertical-align: baseline;">Surgery Quota Scheduler</span>
-
-
-    
+    <h2 style="font-size: 6em; margin-left: 30px; display: flex; align-items: center; vertical-align: baseline;">Surgery Quota Scheduler</h2>
 </div>
 
 
