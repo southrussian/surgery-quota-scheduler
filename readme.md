@@ -70,6 +70,106 @@ The result of launch 'human' render mode is down below:
     <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
 </h1>
 
+## Surgery Quota Scheduler Environment
+
+### Environment Description
+
+**Environment Parameters**
+
+1. **Number of Agents (N)**: 28 agents participate in this environment.
+2. **Number of Days (N_DAYS)**: The setup includes 14 days during which agents interact.
+3. **Number of Iterations (NUM_ITERS)**: Calculated by the formula \(\frac{N^2}{N_{DAYS} \cdot C}\), where \(C = 4\). This determines the total number of steps in an episode.
+4. **Moves**: - Move forward in time;
+- Move back in time;
+- Hold the position;
+- Possible agent movements are encoded as \( \{0 \rightarrow +1, 1 \rightarrow -1, 2 \rightarrow 0\} \).
+5. **Reward Parameter (b)**: Set to 0.2.
+
+**Agents**
+
+Each agent is characterized by the following parameters:
+- **Name**: Randomly generated from a list of popular names and surnames.
+- **Urgency**: Takes values from the set \(\{1, 2, 3\}\).
+- **Completeness**: Takes values from the set \(\{0, 1\}\).
+- **Complexity**: Takes values from the set \(\{0, 1\}\).
+- **Position**: Agent's position within the range \(\{0, 1, ..., 13\}\).
+- **Coefficient (k)**: Calculated as \( k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \).
+- **Mutation Rate**: Ranges from 0 to 1.
+
+**State and Action Spaces**
+
+- **Observation space**: Discrete space represented by a set of size 7 (\(\mathbb{O} = Discrete(7)\)).
+- **Action space**: Also discrete, containing 3 possible actions (\(\mathbb{A} = Discrete(3)\)).
+
+Actions of each agent are denoted as \(a_i \in A\), where \(A\) is the set of all possible actions.
+
+**Reward Function**
+
+An agent's reward is determined by its position and the chosen action according to the following formula:
+
+\[
+\text{reward}(a, p, s, k, \text{action}) =
+\begin{cases}
+b \cdot k - (s[p] - 1) \cdot b & \text{if action} = 0 \\
+- b \cdot k - (s[p] - 2) \cdot b & \text{if action} = 1 \\
+- (s[p] - 4) \cdot b & \text{if action} = 2 \\
+\end{cases}
+\]
+
+where \(s[p]\) is the number of agents at position \(p\), and \(b = 0.2\).
+
+**Termination Rules**
+
+Environment termination occurs under the following conditions:
+- If the number of iterations (\(\text{num_moves}\)) reaches \(NUM\_ITERS - 1\) and more than 80% of agents choose action \(2\):
+
+\[
+\text{termination} = \begin{cases}
+\text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\
+\text{False} & \text{otherwise}
+\end{cases}
+\]
+
+- If the number of iterations reaches \(2 \times NUM\_ITERS - 1\):
+
+\[
+\text{truncation} = \begin{cases}
+\text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1 \\
+\text{False} & \text{otherwise}
+\end{cases}
+\]
+
+**Environment Dynamics**
+
+1. **Position Update**: Agent's position changes according to the chosen action. The position is bounded within the range \([0, N_{DAYS}-1]\).
+2. **Mutation Level**: If an agent's position exceeds half of the days (\(N_{DAYS}/2\)):
+    - Mutation level increases if the action is 0.
+    - Mutation level decreases if the action is 1.
+3. **Agent Parameter Changes**: Depending on the mutation level, urgency, completeness, and complexity parameters of agents may change.
+
+**Environment Initialization**
+
+Upon environment reset, agent parameters and positions are initialized randomly within specified ranges. Initial observations and information are updated according to the current environment state.
+
+### State Space and Combinations
+
+The environment state space is discrete and defined by the set of parameters of all agents. Each agent can be assigned to one of the 14 days, resulting in a large number of possible system configurations.
+
+Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient:
+
+\[
+\binom{N}{4} = \frac{N!}{4!(N-4)!}
+\]
+
+where \(N = 28\). Thus, we have:
+
+\[
+\binom{28}{4} = \frac{28!}{4!(28-4)!} = 20475
+\]
+
+Therefore, in this environment, it is possible to have 20475 different combinations of agents over 4 days out of 14. These combinations create a rich state space, allowing modeling of diverse scenarios and strategies.
+
+
 
 ## Hyperparameters (by default)
 - Baseline reward: $b=0.2$;
