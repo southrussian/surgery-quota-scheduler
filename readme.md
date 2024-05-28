@@ -91,8 +91,8 @@ Each agent is characterized by the following parameters:
 - **Urgency**: Takes values from the set ${1, 2, 3\}$.
 - **Completeness**: Takes values from the set ${0, 1\}$.
 - **Complexity**: Takes values from the set ${0, 1\}$.
-- **Position**: Agent's position within the range \(\{0, 1, ..., 13\}\).
-- **Coefficient (k)**: Calculated as \( k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \).
+- **Position**: Agent's position within the range $\(\{0, 1, ..., 13\}\)$.
+- **Coefficient (k)**: Calculated as $\( k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \)$.
 - **Mutation Rate**: Ranges from 0 to 1.
 
 **State and Action Spaces**
