@@ -138,7 +138,7 @@ Upon environment reset, agent parameters and positions are initialized randomly 
 The environment state space is discrete and defined by the set of parameters of all agents. Each agent can be assigned to one of the 14 days, resulting in a large number of possible system configurations.
 
 Considering possible combinations of 4 agents over 14 days, the number of combinations can be expressed using the binomial coefficient.
-
+$\[ \binom{28}{4} = \frac{28!}{4!(28-4)!} = 20475 \]$
 Therefore, in this environment, it is possible to have 20475 different combinations of agents over 4 days out of 14. These combinations create a rich state space, allowing modeling of diverse scenarios and strategies.
 
 
