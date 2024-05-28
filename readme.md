@@ -114,18 +114,13 @@ where $\(s[p]\)$ is the number of agents at position $\(p\)$, and $\(b = 0.2\)$.
 **Termination Rules**
 
 Environment termination occurs under the following conditions:
-- If the number of iterations $(\(\text{num-moves}\))$ reaches $\(NUM-ITERS - 1\)$ and more than 80% of agents choose action $\(2\)$:
+- If the number of iterations $(\(\text{NUMMOVES}\))$ reaches $\(NUMITERS - 1\)$ and more than 80% of agents choose action $\(2\)$:
 
 $\text{termination} = \begin{cases} \text{True} & \text{if } \frac{\sum \text{actions} = 2}{N} \geq 0.8 \\ \text{False} & \text{otherwise} \end{cases}$
 
-- If the number of iterations reaches $(2 \times NUM_ITERS - 1\)$:
+- If the number of iterations reaches $(2 \times NUMITERS - 1\)$:
 
-$[
-\text{truncation} = \begin{cases}
-\text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1 \\
-\text{False} & \text{otherwise}
-\end{cases}
-\]$
+$\text{truncation} = \begin{cases} \text{True} & \text{if } \text{num_moves} = 2 \times NUM\_ITERS - 1  \text{False} & \text{otherwise} \end{cases}\$
 
 **Environment Dynamics**
 
