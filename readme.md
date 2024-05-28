@@ -89,19 +89,19 @@ The result of launch 'human' render mode is down below:
 
 Each agent is characterized by the following parameters:
 - **Name**: Randomly generated from a list of popular names and surnames.
-- **Urgency**: Takes values from the set $\{\{1, 2, 3\}\}$.
-- **Completeness**: Takes values from the set $\{\{0, 1\}\}$.
-- **Complexity**: Takes values from the set $\{\{0, 1\}\}$.
+- **Urgency**: Takes values from the set $\(\{1, 2, 3\}\)$.
+- **Completeness**: Takes values from the set $\(\{0, 1\}\)$.
+- **Complexity**: Takes values from the set $\(\{0, 1\}\)$.
 - **Position**: Agent's position within the range $\(\{0, 1, ..., 13\}\)$.
 - **Coefficient (k)**: Calculated as $\ k = (\text{complexity} + (1 - \text{completeness})) \times \text{urgency} \$.
 - **Mutation Rate**: Ranges from 0 to 1.
 
 **State and Action Spaces**
 
-- **Observation space**: Discrete space represented by a set of size 7 (\(\mathbb{O} = Discrete(7)\)).
-- **Action space**: Also discrete, containing 3 possible actions (\(\mathbb{A} = Discrete(3)\)).
+- **Observation space**: Discrete space represented by a set of size 7 $(\(\mathbb{O} = Discrete(7)\))$.
+- **Action space**: Also discrete, containing 3 possible actions $(\(\mathbb{A} = Discrete(3)\))$.
 
-Actions of each agent are denoted as \(a_i \in A\), where \(A\) is the set of all possible actions.
+Actions of each agent are denoted as $\(a_i \in A\)$, where $\(A\)$ is the set of all possible actions.
 
 **Reward Function**
 
