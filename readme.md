@@ -31,7 +31,7 @@ The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Schedu
  - [Launched application](#launched-application)
 
 ## Environment usage
-To run the model training process, use a bash script as follows:
+To run the simulation, use a bash script as follows:
 ```
 ./run.sh
 ```
