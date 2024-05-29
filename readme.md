@@ -151,3 +151,6 @@ The result of launch 'human' render mode is down below:
 <h1 style="text-align: center;width: 120%">
     <img alt="pygame gif" src="assets/2024-03-26 15.22.44.gif" width="90%">
 </h1>
+
+## Documentation
+Read the detailed documentation of how the simulation program code works [here](https://github.com/southrussian/surgery-quota-schedulerr/blob/main/DOCUMENTATION.md).
