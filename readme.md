@@ -7,9 +7,9 @@
 <div>
   
 
-<img alt="python" src="assets/python.png" width="90">
-<img alt="pettingzoo" src="assets/pettingzoo.png" width="113">
-<img alt="gym" src="assets/gym.png" width="100">
+<img alt="python" src="assets/python.png">
+<img alt="pettingzoo" src="assets/pettingzoo.png">
+<img alt="gym" src="assets/gym.png">
 
 </div>
 The Multi-Agent Reinforcement Learning (MARL) environment's Surgery Quota Scheduler is a strategic game that revolves around optimizing surgery schedules. Agents, representing surgeries, must navigate a limited capacity schedule, balancing urgency, complexity, and data completeness to maximize rewards. They can move through time slots, hold positions, or recall their quotes, all while contending with partial visibility of the schedule. The goal is to efficiently allocate surgeries across time slots without overcrowding, and the game concludes once a predetermined number of steps are taken. This system aims to simulate the decision-making process in surgical scheduling, emphasizing the importance of flexibility and foresight.
