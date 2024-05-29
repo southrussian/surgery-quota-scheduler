@@ -153,4 +153,4 @@ The result of launch 'human' render mode is down below:
 </h1>
 
 ## Documentation
-Read the detailed documentation of how the simulation program code works [here](https://github.com/southrussian/surgery-quota-schedulerr/blob/main/DOCUMENTATION.md).
+Read the detailed documentation of how the simulation program code works [here](https://github.com/southrussian/surgery-quota-scheduler/blob/main/DOCUMENTATION.md).
