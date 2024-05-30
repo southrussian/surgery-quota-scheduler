@@ -96,6 +96,11 @@ class Agent(nn.Module):
         self.actor = layer_init(nn.Linear(32, 3))
         self.critic = layer_init(nn.Linear(32, 1))
 
+    def forward(self, x):
+        x = x.clone()
+        hidden = self.network(x)
+        return self.actor(hidden)
+
     def get_value(self, x):
         x = x.clone()
         hidden = self.network(x)
@@ -294,7 +299,6 @@ if __name__ == "__main__":
     env.close()
     writer.close()
 
-
 agent.eval()
 env = SurgeryQuotaScheduler(render_mode='human')
 with torch.no_grad():
@@ -309,4 +313,14 @@ with torch.no_grad():
         next_truncations = max(next_truncations_list.values())
         next_terminations = max(next_terminations_list.values())
 
+import torch.onnx
 
+# Save the PyTorch model
+torch.save(agent.state_dict(), 'agent_model.pt')
+
+# Convert the PyTorch model to ONNX format
+dummy_input = torch.zeros(1, 7)  # Assuming input shape is (1, 7)
+onnx_path = 'agent_model.onnx'
+torch.onnx.export(agent, dummy_input, onnx_path)
+
+print(f"Model converted to ONNX format and saved at: {onnx_path}")
